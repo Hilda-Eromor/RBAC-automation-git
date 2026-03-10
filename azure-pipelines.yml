@@ -1,0 +1,43 @@
+trigger:
+- main
+
+variables:
+  subscriptionId: "7d69cb51-bea6-4579-a183-a1dbc8572d21"
+  resourceGroup: "three-tier-rg"
+  assignee: "bf1b9c28-5ccf-4da9-ba2e-1441d9af6a86"
+  roleName: "Contributor"
+
+stages:
+- stage: Provision
+  jobs:
+  - job: AssignRole
+    steps:
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: 'Azure-RBAC-Connection'
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          echo "Assigning role..."
+          az role assignment create \
+            --assignee $(assignee) \
+            --role "$(roleName)" \
+            --scope "/subscriptions/$(subscriptionId)/resourceGroups/$(resourceGroup)"
+
+- stage: Cleanup
+  jobs:
+  - job: RemoveRole
+    steps:
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: 'Azure-RBAC-Connection'
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          echo "Removing role..."
+          az role assignment delete \
+            --assignee $(assignee) \
+            --role "$(roleName)" \
+            --scope "/subscriptions/$(subscriptionId)/resourceGroups/$(resourceGroup)"
+
+
