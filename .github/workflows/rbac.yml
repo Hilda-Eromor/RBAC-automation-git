@@ -16,6 +16,7 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Run RBAC script
+      - name: Run RBAC setup script
         run: |
           bash rbac-automation/setup.sh
+
