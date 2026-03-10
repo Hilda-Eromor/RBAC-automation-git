@@ -1,6 +1,4 @@
 # RBAC Automation Project
-# RBAC Automation
-
 This repository contains scripts and a GitHub Actions workflow to automate
 Azure Role-Based Access Control (RBAC) setup and cleanup.
 
